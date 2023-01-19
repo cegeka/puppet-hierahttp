@@ -42,7 +42,7 @@ Puppet::Functions.create_function(:hiera_http) do
 
   def return_answer(result, key, options)
 
-    # dig defaults to true, dig_key defaults to the value of the 
+    # dig defaults to true, dig_key defaults to the value of the
     # lookup key.
     #
     dig = options.has_key?('dig') ? options['dig'] : true
@@ -102,7 +102,8 @@ Puppet::Functions.create_function(:hiera_http) do
 
   def http_get(context, options)
     uri = URI.parse(options['uri'])
-    host, port, path = uri.host, uri.port, URI.escape(context.interpolate(uri.request_uri))
+    parser = URI::Parser.new
+    host, port, path = uri.host, uri.port, parser.escape(context.interpolate(uri.request_uri))
 
     if context.cache_has_key(path)
       context.explain { "Returning cached value for #{path}" }
@@ -150,4 +151,3 @@ Puppet::Functions.create_function(:hiera_http) do
     ]
   end
 end
-
